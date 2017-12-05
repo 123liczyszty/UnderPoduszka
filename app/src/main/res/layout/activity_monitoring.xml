@@ -1,54 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-    <TextView
-        android:id="@+id/gyroscope"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    android:orientation="vertical">
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="250dp"
+        android:layout_height="350dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="25dp"
-        android:text="1.2 rad/s"
-        android:gravity="center_horizontal"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/akcelometer"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:text="0.8 m/s"
-        android:gravity="center_horizontal"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/microphone"
-        android:text="532 Hz"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:gravity="center_horizontal"
-        android:textSize="20dp" />
+        android:src="@drawable/pikachu"
+        />
 
 
-    <Button
-        android:id="@+id/startstop"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="45dp"
-        android:gravity="center_horizontal"
-        android:text="START/SToP"
-        android:onClick="StartStop"
-        android:textSize="30dp" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/startstop"
+            android:layout_weight="1"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="45dp"
+            android:onClick="StartStop"
+            android:text="START"
+            android:textSize="30dp" />
+        <Button
+            android:id="@+id/back"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/startstop"
+            android:layout_alignBottom="@+id/startstop"
+            android:layout_alignTop="@+id/startstop"
+            android:layout_alignParentRight="true"
+            android:onClick="Back"
+            android:text="BACK"
+            android:textSize="30dp" />
+    </RelativeLayout>
+
 
 </LinearLayout>
 
