@@ -1,5 +1,4 @@
-package underpoduszka;
-
+package pl.gda.biomed.jwr.underpoduszka;
 
 import android.os.AsyncTask;
 import android.os.Build;

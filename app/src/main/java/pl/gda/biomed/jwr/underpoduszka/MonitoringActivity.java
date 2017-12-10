@@ -1,4 +1,4 @@
-package underpoduszka;
+package pl.gda.biomed.jwr.underpoduszka;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -99,15 +99,17 @@ public class MonitoringActivity extends AppCompatActivity {
 
     }
 
-    // funkcja opisująca czynności wykonywane na przycisk
+    // funkcja opisująca czynności wykonywane na przycisk start/stop
     public void StartStop(View view) {
         button = (Button) findViewById(R.id.startstop);
+        // czynności wywoływane na "Stop"
         if(button.getText() == "STOP"){
             stop = true;
             button.setText("START");
             manager.unregisterListener(gyroscopeListener, gyroscopeSensor);
             manager.unregisterListener(accelerometerListener, accelerometerSensor);
         }
+        // czynności wywoływane na "Start"
         else {
             stop = false;
             manager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -145,7 +147,7 @@ public class MonitoringActivity extends AppCompatActivity {
     }
 
 
-    // funkcja opisująca czynności wykonywane na przycisk
+    // funkcja opisująca czynności wykonywane na przycisk powrót
     public void Back(View view) {
         AlertDialog.Builder wantBack = new AlertDialog.Builder(MonitoringActivity.this).setMessage("Chcesz zakończyć monitoring?");
         wantBack.setCancelable(false).setPositiveButton("TAK", new DialogInterface.OnClickListener() {

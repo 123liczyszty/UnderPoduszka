@@ -1,4 +1,4 @@
-package underpoduszka;
+package pl.gda.biomed.jwr.underpoduszka;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

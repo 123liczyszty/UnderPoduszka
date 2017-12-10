@@ -1,4 +1,4 @@
-package underpoduszka;
+package pl.gda.biomed.jwr.underpoduszka;
 
 import android.content.Intent;
 import android.os.Bundle;
