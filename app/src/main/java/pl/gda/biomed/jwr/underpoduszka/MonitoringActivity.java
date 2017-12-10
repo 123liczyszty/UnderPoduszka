@@ -1,4 +1,4 @@
-package com.example.piotr.underpoduszka;
+package underpoduszka;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,9 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.piotr.underpoduszka.R;
+
+/*
+ * Klasa pobierająca wartości z sensorów telefon
+ */
 public class MonitoringActivity extends AppCompatActivity {
     private final int Period = /*15 * 60 **/ 10000;
-    private RestService restService = new RestService();
     private Handler handler = new Handler();
     boolean stop = true;
     Sensor gyroscopeSensor;
@@ -30,6 +34,7 @@ public class MonitoringActivity extends AppCompatActivity {
     String UserName;
     String City;
 
+    // funkcja opisująca czynności wykonywane po rozpoczęciu monitorowania aktywności
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,7 @@ public class MonitoringActivity extends AppCompatActivity {
         }).create().show();
     }
 
+    // funkcja definiująca wartości pobierane z żyroskopu
     private void GyroscopeListener() {
         gyroscopeSensor = manager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
@@ -68,6 +74,7 @@ public class MonitoringActivity extends AppCompatActivity {
         manager.registerListener(gyroscopeListener,gyroscopeSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
+    // funkcja definiująca wartości pobierane z akcelerometru
     private void AcelerometerListener() {
         accelerometerSensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         accelerometerListener = new SensorEventListener() {
@@ -92,6 +99,7 @@ public class MonitoringActivity extends AppCompatActivity {
 
     }
 
+    // funkcja opisująca czynności wykonywane na przycisk
     public void StartStop(View view) {
         button = (Button) findViewById(R.id.startstop);
         if(button.getText() == "STOP"){
@@ -111,6 +119,7 @@ public class MonitoringActivity extends AppCompatActivity {
         }
     }
 
+    // funkcja umożliwiająca pobieranie danych z sensorów co 15 minut
     private void SendPackagesEvery15minutes() {
     handler.postDelayed(new Runnable() {
         @Override
@@ -122,6 +131,7 @@ public class MonitoringActivity extends AppCompatActivity {
     }, Period);
     }
 
+    // funkcja umożliwiająca zapis i przetworzenie danych z sensorów
     private void ProcessData() {
         manager.unregisterListener(gyroscopeListener, gyroscopeSensor);
         manager.unregisterListener(accelerometerListener, accelerometerSensor);
@@ -135,7 +145,7 @@ public class MonitoringActivity extends AppCompatActivity {
     }
 
 
-
+    // funkcja opisująca czynności wykonywane na przycisk
     public void Back(View view) {
         AlertDialog.Builder wantBack = new AlertDialog.Builder(MonitoringActivity.this).setMessage("Chcesz zakończyć monitoring?");
         wantBack.setCancelable(false).setPositiveButton("TAK", new DialogInterface.OnClickListener() {

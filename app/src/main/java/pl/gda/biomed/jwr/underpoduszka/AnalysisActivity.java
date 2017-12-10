@@ -1,4 +1,4 @@
-package com.example.piotr.underpoduszka;
+package underpoduszka;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -10,17 +10,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.example.piotr.underpoduszka.R;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+/*
+ * Klasa generująca wykresy i analizująca wartości z sensorów
+ */
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class AnalysisActivity extends AppCompatActivity {
+    // inicjalizacja zmiennych
     String cityChoosen = "";
     String userNameChoosen = "";
     String dateChoosen = "";
     Spinner nameSpinner;
 
+    // funkcja zwracajaca widok poczatkowy aplikacji
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,32 +36,31 @@ public class AnalysisActivity extends AppCompatActivity {
         getListOfCity();
     }
 
+    // funkcja pobierająca listę wpisanych miast
     private void getListOfCity() {
         new GetCityList().execute();
     }
 
+    // funkcja pobierająca listę użytkowników przypisanych do danych miast
     private void getUsersOnCity() {
 
         new GetUsersOnCity().execute();
     }
 
+    // funkcja pobierająca datę
     private void getDate() {
         new GetDate().execute();
     }
 
+    // funkcja generująca wykrsy
     public void gyroGraph(View view) {
         new GenerateGraph().execute();
-
-
-
-
-
-
-
-
     }
 
 
+    /*
+    * Klasa umożliwiająca połączenie z bazą danych i asynchroniczne pobieranie listy miast
+    */
     private class GetCityList extends AsyncTask<Void,Void,String[]> {
         @Override
         protected String[] doInBackground(Void... voids) {
@@ -87,6 +93,9 @@ public class AnalysisActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * Klasa umożliwiająca połączenie z bazą danych i asynchroniczne pobieranie listy użytkowników
+    */
     private class GetUsersOnCity extends AsyncTask<Void,Void,String[]> {
         @Override
         protected String[] doInBackground(Void... voids) {
@@ -118,7 +127,9 @@ public class AnalysisActivity extends AppCompatActivity {
         }
     }
 
-
+    /*
+    * Klasa umożliwiająca połączenie z bazą danych i asynchroniczne pobieranie daty
+    */
     private class GetDate extends AsyncTask <Void,Void,String[]> {
         @Override
         protected String[] doInBackground(Void... voids) {
@@ -149,6 +160,10 @@ public class AnalysisActivity extends AppCompatActivity {
         }
     }
 
+
+    /*
+    * Klasa umożliwiająca połączenie z bazą danych i asynchroniczne generowanie wykresów na podstawie wartości z sensorów
+    */
     private class GenerateGraph extends AsyncTask<Void,Void,DataModel[]>{
         @Override
         protected DataModel[] doInBackground(Void... voids) {
