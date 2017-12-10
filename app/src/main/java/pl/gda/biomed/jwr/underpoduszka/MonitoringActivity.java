@@ -25,10 +25,12 @@ public class MonitoringActivity extends AppCompatActivity {
     boolean stop = true;
     Sensor gyroscopeSensor;
     Sensor accelerometerSensor;
+    Sensor microphoneSensor;
     SensorManager manager ;
     Button button;
     SensorEventListener gyroscopeListener;
     SensorEventListener accelerometerListener;
+    SensorEventListener microphoneListener;
     Float accelerometerMeasurement = (float) 0;
     Float gyroscopeMeasurement = (float) 0;
     String UserName;
