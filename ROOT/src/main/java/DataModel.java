@@ -4,7 +4,7 @@ package rest;
 public class DataModel {
     public String gyroscopeValue;
 
-    public String microPhoneValue;
+    public String microphoneValue;
 
     public String acceleroMeterValue;
 
@@ -14,9 +14,11 @@ public class DataModel {
 	
 	public String city;
 	
-	public DataModel(String gyro,String accelero, String time, String user, String city){
+	public DataModel(String gyro,String accelero, String micro, String time, String user, String city)
+	{
 		this.gyroscopeValue = gyro;
 		this.acceleroMeterValue = accelero;
+		this.microphoneValue = micro;
 		this.currentTime = time;
 		this.userName = userName;
 		this.city = city;

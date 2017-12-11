@@ -12,7 +12,7 @@ public class SQLLite{
 		Connection connection = null;
 		try
 		{
-			connection = DriverManager.getConnection("jdbc:sqlite:C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/ROOT/sleepunderpillow.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/ROOT/sleepunderpillow.db"); ///////////////////////////////////////////////////////
 		}
 		catch(SQLException e)
 		{
@@ -21,16 +21,17 @@ public class SQLLite{
 		return connection;	
 		}
 
-		public void insert(String gyro, String accel, String time, String userName, String city)
+		public void insert(String gyro, String accel, String micro, String time, String userName, String city)
 		{
-			String sql = "INSERT INTO Measure (Gyroscope,Accelerometer,Time,UserName,City) VALUES (?,?,?,?,?)";		
+			String sql = "INSERT INTO Measure (Gyroscope,Accelerometer,Microphone,Time,UserName,City) VALUES (?,?,?,?,?,?)";		
 		 try (Connection conn = this.connect()){
              PreparedStatement pstmt = conn.prepareStatement(sql) ;
             pstmt.setString(1, gyro);
             pstmt.setString(2, accel);
-            pstmt.setString(3, time);
-            pstmt.setString(4, userName);
-            pstmt.setString(5, city);
+            pstmt.setString(3, micro);
+			pstmt.setString(4, time);
+            pstmt.setString(5, userName);
+            pstmt.setString(6, city);
             pstmt.executeUpdate();
         } 
 		catch (SQLException e) 
@@ -38,8 +39,7 @@ public class SQLLite{
             System.out.println(e.getMessage());
         }
 		
-		}
-		
+		}		
 		public List<String> getCityList (){
 			String sql = "select DISTINCT City from Measure;";
 			List<String> list = new ArrayList();
@@ -117,7 +117,7 @@ public class SQLLite{
             while (rs.next()) {				
 				String dateTime = rs.getString("Time");
 				String[] timeHourMin = dateTime.split("\\s+");				
-				list.add(new DataModel(rs.getString("Gyroscope"), rs.getString("Accelerometer"), timeHourMin[1], rs.getString("UserName"), rs.getString("City")));	
+				list.add(new DataModel(rs.getString("Gyroscope"), rs.getString("Accelerometer"), rs.getString("Microphone"), timeHourMin[1], rs.getString("UserName"), rs.getString("City")));	
             }
 			}
 			catch (SQLException e) 

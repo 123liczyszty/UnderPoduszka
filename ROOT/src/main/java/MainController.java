@@ -18,16 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {  
 
-    @RequestMapping(value="/getData/{gyroscope}/{accelerometer}/{time}/{userName}/{city}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/getData/{gyroscope}/{accelerometer}/{microphone}/{time}/{userName}/{city}", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataModel passRecord(@PathVariable(value="gyroscope") String gyroscopeValue, 
 								@PathVariable(value="accelerometer") String acceloremeterValue,
+								@PathVariable(value="microphone") String microphoneValue,
 								@PathVariable(value="time") String time,
 								@PathVariable(value="userName") String userName,
 								@PathVariable(value="city") String city) 
 	{      
 		
 		SQLLite db = new SQLLite();		
-		db.insert(gyroscopeValue, acceloremeterValue, time, userName, city);
+		db.insert(gyroscopeValue, acceloremeterValue, microphoneValue, time, userName, city);
 		return null;
     }
 	
