@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/UnderPoduszka.iml" filepath="$PROJECT_DIR$/UnderPoduszka.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/underpoduszka.iml" filepath="$PROJECT_DIR$/underpoduszka.iml" />
+      <module fileurl="file://C:\Users\Piotr\Desktop\Underpoduszka\UnderPoduszka\app\app.iml" filepath="C:\Users\Piotr\Desktop\Underpoduszka\UnderPoduszka\app\app.iml" />
+      <module fileurl="file://C:\Users\Piotr\Desktop\Underpoduszka\UnderPoduszka\underpoduszka.iml" filepath="C:\Users\Piotr\Desktop\Underpoduszka\UnderPoduszka\underpoduszka.iml" />
     </modules>
   </component>
 </project>

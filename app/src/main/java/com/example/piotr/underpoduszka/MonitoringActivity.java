@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,17 +17,19 @@ import android.widget.Toast;
 
 public class MonitoringActivity extends AppCompatActivity {
     private final int Period = /*15 * 60 **/ 10000;
-    private RestService restService = new RestService();
     private Handler handler = new Handler();
     boolean stop = true;
     Sensor gyroscopeSensor;
     Sensor accelerometerSensor;
+    Sensor microphoneSensor;
     SensorManager manager ;
     Button button;
     SensorEventListener gyroscopeListener;
     SensorEventListener accelerometerListener;
+    SensorEventListener microphoneListener;
     Float accelerometerMeasurement = (float) 0;
     Float gyroscopeMeasurement = (float) 0;
+    Float microphoneMeasurement = (float) 0;
     String UserName;
     String City;
 
@@ -85,6 +88,25 @@ public class MonitoringActivity extends AppCompatActivity {
         manager.registerListener(accelerometerListener,accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
+    private void MicrophoneListener()
+    {
+        microphoneSensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        microphoneListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event)
+            {
+                if((event.values[0] + event.values[1] + event.values[2]) > 0)
+                    microphoneMeasurement = (float) (10 * Math.log10((event.values[0] + event.values[1] + event.values[2]) / 3)) ; //mierzenie natezenia dzwieku
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+        manager.registerListener(microphoneListener,microphoneSensor, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -99,6 +121,7 @@ public class MonitoringActivity extends AppCompatActivity {
             button.setText("START");
             manager.unregisterListener(gyroscopeListener, gyroscopeSensor);
             manager.unregisterListener(accelerometerListener, accelerometerSensor);
+            manager.unregisterListener(microphoneListener, microphoneSensor);
         }
         else {
             stop = false;
@@ -106,8 +129,8 @@ public class MonitoringActivity extends AppCompatActivity {
             button.setText("STOP");
             GyroscopeListener();
             AcelerometerListener();
+            MicrophoneListener();
             SendPackagesEvery15minutes();
-
         }
     }
 
@@ -125,13 +148,17 @@ public class MonitoringActivity extends AppCompatActivity {
     private void ProcessData() {
         manager.unregisterListener(gyroscopeListener, gyroscopeSensor);
         manager.unregisterListener(accelerometerListener, accelerometerSensor);
-        DataModel model = new DataModel(String.valueOf(gyroscopeMeasurement), String.valueOf(accelerometerMeasurement), UserName, City);
+        manager.unregisterListener(microphoneListener, microphoneSensor);
+        Log.d("TAG",City);
+        DataModel model = new DataModel(String.valueOf(gyroscopeMeasurement), String.valueOf(accelerometerMeasurement),String.valueOf(microphoneMeasurement),  UserName, City);
         Toast.makeText(getApplicationContext(), "Przesyłam dane...", Toast.LENGTH_SHORT).show();
         new ProcessDataToServer(model).execute();
         gyroscopeMeasurement = (float)0;
         accelerometerMeasurement = (float)0;
         manager.registerListener(gyroscopeListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_FASTEST);
         manager.registerListener(accelerometerListener, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        manager.registerListener(microphoneListener, microphoneSensor, SensorManager.SENSOR_DELAY_FASTEST);
+
     }
 
 

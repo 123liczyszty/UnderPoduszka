@@ -5,14 +5,27 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class AnalysisActivity extends AppCompatActivity {
@@ -20,12 +33,15 @@ public class AnalysisActivity extends AppCompatActivity {
     String userNameChoosen = "";
     String dateChoosen = "";
     Spinner nameSpinner;
-
+    AsyncTask myTask;
+    GraphView graph;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
         nameSpinner = (Spinner) findViewById(R.id.spinnerName);
+        graph = (GraphView) findViewById(R.id.graph);
+        graph.getGridLabelRenderer().setTextSize(10f);
         getListOfCity();
     }
 
@@ -43,15 +59,18 @@ public class AnalysisActivity extends AppCompatActivity {
     }
 
     public void gyroGraph(View view) {
-        new GenerateGraph().execute();
+        if(myTask != null) myTask.cancel(true);
+        graph.removeAllSeries();
+        myTask = new GenerateGraph("Gyroscope").execute();
 
 
 
+    }
 
-
-
-
-
+    public void accelGraph(View view) {
+        if(myTask != null) myTask.cancel(true);
+        graph.removeAllSeries();
+        myTask = new GenerateGraph("Accelerometer").execute();
     }
 
 
@@ -59,7 +78,7 @@ public class AnalysisActivity extends AppCompatActivity {
         @Override
         protected String[] doInBackground(Void... voids) {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://192.168.0.6:8080/getCities";
+            String url = "http://192.168.0.34:8080/getCities";
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             ResponseEntity<String[]> responseEntity = restTemplate.getForEntity(url, String[].class);
             return responseEntity.getBody();
@@ -91,7 +110,7 @@ public class AnalysisActivity extends AppCompatActivity {
         @Override
         protected String[] doInBackground(Void... voids) {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://192.168.0.6:8080/getUserList/{city}";
+            String url = "http://192.168.0.34:8080/getUserList/{city}";
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             ResponseEntity<String[]> responseEntity = restTemplate.getForEntity(url, String[].class, cityChoosen);
             return responseEntity.getBody();
@@ -123,7 +142,7 @@ public class AnalysisActivity extends AppCompatActivity {
         @Override
         protected String[] doInBackground(Void... voids) {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://192.168.0.6:8080/getDate/{city}/{userName}";
+            String url = "http://192.168.0.34:8080/getDate/{city}/{userName}";
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             ResponseEntity<String[]> responseEntity = restTemplate.getForEntity(url, String[].class, cityChoosen, userNameChoosen);
             return responseEntity.getBody();
@@ -150,18 +169,63 @@ public class AnalysisActivity extends AppCompatActivity {
     }
 
     private class GenerateGraph extends AsyncTask<Void,Void,DataModel[]>{
+        String choosenGraph;
+        public GenerateGraph(String option) {
+            this.choosenGraph = option;
+        }
+
         @Override
         protected DataModel[] doInBackground(Void... voids) {
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://192.168.0.6:8080/getDataSets/{city}/{userName}/{time}";
+            String url = "http://192.168.0.34:8080/getDataSets/{city}/{userName}/{time}";
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             ResponseEntity<DataModel[]> responseEntity = restTemplate.getForEntity(url, DataModel[].class, cityChoosen, userNameChoosen, dateChoosen);
             return responseEntity.getBody();
+
+
         }
 
         @Override
         protected void onPostExecute(DataModel[] dataModels) {
             super.onPostExecute(dataModels);
+            List<String> times = new ArrayList();
+            List<String> values = new ArrayList();
+
+
+            for(DataModel x : dataModels){
+                times.add(x.currentTime);
+
+                switch(choosenGraph){
+                    case "Gyroscope":
+                        values.add(x.gyroscopeValue);
+                        break;
+                    case "Accelerometer":
+                        values.add(x.acceleroMeterValue);
+                        break;
+                    case "Microphone":
+                        values.add(x.microPhoneValue);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            DateFormat parser = new SimpleDateFormat("hh:mm:ss");
+            DataPoint[] dataPoints = new DataPoint[times.size()];
+            for( int i = 0; i < times.size(); i++){
+                Date date = new Date();
+                try {
+                    date = parser.parse(times.get(i));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Double x = Double.valueOf(String.valueOf(date.getHours()) + '.' + String.valueOf(date.getMinutes()));
+                Double y = Double.valueOf(values.get(i));
+                dataPoints[i] = new DataPoint(x,y);
+            }
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+            series.setTitle("Wykres : " + choosenGraph);
+            graph.addSeries(series);
         }
     }
 }

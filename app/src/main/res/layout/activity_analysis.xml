@@ -78,7 +78,7 @@
         android:textSize="8dp"
         android:id="@+id/accel"
         android:text="@string/Accelero"
-        android:onClick="gyroGraph"
+        android:onClick="accelGraph"
         />
 
     <Button
@@ -89,6 +89,8 @@
         android:textSize="8dp"
         android:id="@+id/gyro"
         android:text="@string/Gyro"
+        android:onClick="gyroGraph"
+
         />
 
     <Button
