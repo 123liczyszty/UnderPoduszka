@@ -1,5 +1,6 @@
 package com.example.piotr.underpoduszka;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +46,13 @@ public class AnalysisActivity extends AppCompatActivity {
         getListOfCity();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myTask.cancel(true);
+        graph.removeAllSeries();
+    }
+
     private void getListOfCity() {
         new GetCityList().execute();
     }
@@ -71,6 +79,12 @@ public class AnalysisActivity extends AppCompatActivity {
         if(myTask != null) myTask.cancel(true);
         graph.removeAllSeries();
         myTask = new GenerateGraph("Accelerometer").execute();
+    }
+
+    public void microGraph(View view) {
+        if(myTask != null) myTask.cancel(true);
+        graph.removeAllSeries();
+        myTask = new GenerateGraph("Microphone").execute();
     }
 
 
@@ -185,6 +199,7 @@ public class AnalysisActivity extends AppCompatActivity {
 
         }
 
+
         @Override
         protected void onPostExecute(DataModel[] dataModels) {
             super.onPostExecute(dataModels);
@@ -203,7 +218,7 @@ public class AnalysisActivity extends AppCompatActivity {
                         values.add(x.acceleroMeterValue);
                         break;
                     case "Microphone":
-                        values.add(x.microPhoneValue);
+                        values.add(x.microphoneValue);
                         break;
                     default:
                         break;
@@ -224,8 +239,12 @@ public class AnalysisActivity extends AppCompatActivity {
             }
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
-            series.setTitle("Wykres : " + choosenGraph);
+
             graph.addSeries(series);
+            series.setDrawDataPoints(true);
+            series.setColor(Color.RED);
+            series.setDataPointsRadius(10);
+            graph.setTitle("Wykres : " + choosenGraph);
         }
     }
 }

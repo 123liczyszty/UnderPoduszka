@@ -101,6 +101,7 @@
         android:textSize="8dp"
         android:id="@+id/micro"
         android:text="@string/Micro"
+        android:onClick="microGraph"
         />
 
     <com.jjoe64.graphview.GraphView

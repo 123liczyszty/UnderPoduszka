@@ -28,9 +28,9 @@ public class ProcessDataToServer extends AsyncTask<Void,Void,Void> {
     protected Void doInBackground(Void... voids) {
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://192.168.0.34:8080/getData/{gyroscope}/{accelerometer}/{time}/{userName}/{city}";
+        String url = "http://192.168.0.34:8080/getData/{gyroscope}/{accelerometer}/{microphone}/{time}/{userName}/{city}";
         restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-        restTemplate.getForObject(url, DataModel.class,dataModel.gyroscopeValue,dataModel.acceleroMeterValue,dataModel.currentTime,dataModel.userName,dataModel.city);
+        restTemplate.getForObject(url, DataModel.class,dataModel.gyroscopeValue,dataModel.acceleroMeterValue,dataModel.microphoneValue, dataModel.currentTime,dataModel.userName,dataModel.city);
         return null;
     }
 

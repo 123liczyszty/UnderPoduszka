@@ -10,7 +10,7 @@ import java.util.Calendar;
 public class DataModel {
     public String gyroscopeValue;
 
-    public String microPhoneValue;
+    public String microphoneValue;
 
     public String acceleroMeterValue;
 
@@ -20,10 +20,10 @@ public class DataModel {
 
     public String city;
 
-    public DataModel(String gyroscopeValue, String acceleroMeterValue, String microPhoneValue, String UserName, String City) {
+    public DataModel(String gyroscopeValue, String acceleroMeterValue, String microphoneValue, String UserName, String City) {
         this.gyroscopeValue = gyroscopeValue;
         this.acceleroMeterValue = acceleroMeterValue;
-        this.microPhoneValue = microPhoneValue;
+        this.microphoneValue = microphoneValue;
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         this.currentTime = simpleDateFormat.format(calendar.getTime());
