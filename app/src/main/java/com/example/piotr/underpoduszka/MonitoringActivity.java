@@ -158,10 +158,7 @@ public class MonitoringActivity extends AppCompatActivity {
         manager.registerListener(gyroscopeListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_FASTEST);
         manager.registerListener(accelerometerListener, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
         manager.registerListener(microphoneListener, microphoneSensor, SensorManager.SENSOR_DELAY_FASTEST);
-
     }
-
-
 
     public void Back(View view) {
         AlertDialog.Builder wantBack = new AlertDialog.Builder(MonitoringActivity.this).setMessage("Chcesz zakończyć monitoring?");
@@ -177,6 +174,4 @@ public class MonitoringActivity extends AppCompatActivity {
             }
         }).show();
     }
-
-
 }

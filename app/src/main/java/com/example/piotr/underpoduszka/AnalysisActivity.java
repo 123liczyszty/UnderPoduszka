@@ -49,7 +49,7 @@ public class AnalysisActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        myTask.cancel(true);
+        if(myTask != null) myTask.cancel(true);
         graph.removeAllSeries();
     }
 

@@ -21,9 +21,6 @@ public class ProcessDataToServer extends AsyncTask<Void,Void,Void> {
         this.dataModel = model;
     }
 
-
-
-
     @Override
     protected Void doInBackground(Void... voids) {
 
